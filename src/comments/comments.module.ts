@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { CommentModel } from './comments.model';
 import { CommentsController } from './comments.controller';
+import { CommentsService } from './services/comments.service';
 
 @Module({
   imports: [
@@ -15,5 +16,6 @@ import { CommentsController } from './comments.controller';
     ]),
   ],
   controllers: [CommentsController],
+  providers: [CommentsService],
 })
 export class CommentsModule {}

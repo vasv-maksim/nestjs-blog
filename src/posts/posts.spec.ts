@@ -1,4 +1,4 @@
-import { Post } from './posts';
+import { Post } from './services';
 
 describe('Post', () => {
   it('should be defined', () => {

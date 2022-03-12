@@ -16,11 +16,13 @@ export class PostsController {
   @Get()
   async getAll() {
     console.log('');
+    return 'test';
   }
 
   @Get(':id')
   async getOne(@Param('id') id: string) {
     console.log(id);
+    return `test${id}`;
   }
 
   @Post()
