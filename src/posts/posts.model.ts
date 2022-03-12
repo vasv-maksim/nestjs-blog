@@ -10,5 +10,8 @@ export class PostModel extends TimeStamps {
   text: string;
 
   @prop()
-  rating: string;
+  rating: number;
+
+  @prop({ type: () => [String] })
+  tags?: string[];
 }
