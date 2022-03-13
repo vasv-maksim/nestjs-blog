@@ -4,43 +4,64 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { FindUserDto } from './dto/user-comment.dto';
-import { UserModel } from './users.model';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from './services/users.service';
+import { NOT_FOUND_USER } from './users.constant';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
   @Get()
   async getAll() {
-    console.log('');
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    console.log(id);
+    return this.usersService.findById(id);
   }
 
+  @UsePipes(new ValidationPipe())
   @Post()
-  async create(@Body() dto: Omit<UserModel, '_id'>) {
-    console.log(dto);
+  async create(@Body() dto: CreateUserDto) {
+    this.usersService.create(dto);
   }
 
   @HttpCode(200)
   @Post()
-  async find(@Body() dto: FindUserDto) {
-    console.log(dto);
+  async find(@Body() id: string) {
+    const post = this.usersService.findById(id);
+    if (!post) {
+      throw new HttpException(NOT_FOUND_USER, HttpStatus.NOT_FOUND);
+    }
+    return post;
   }
 
+  @UsePipes(new ValidationPipe())
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() dto: UserModel) {
-    console.log(id, dto);
+  async patch(@Param('id') id: string, @Body() dto: CreateUserDto) {
+    const patchedPost = this.usersService.patch(id, dto);
+    if (!patchedPost) {
+      throw new HttpException(NOT_FOUND_USER, HttpStatus.NOT_FOUND);
+    }
+    return patchedPost;
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    console.log(id);
+    const deletedPost = await this.usersService.delete(id);
+    if (!deletedPost) {
+      throw new HttpException(NOT_FOUND_USER, HttpStatus.NOT_FOUND);
+    }
+    return deletedPost;
   }
 }

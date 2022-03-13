@@ -1,13 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { PostModel } from '../posts.model';
 import { Types } from 'mongoose';
+import { InjectModel } from 'nestjs-typegoose';
 
 @Injectable()
 export class PostsService {
   constructor(
-    @Inject(PostModel) private readonly postModel: ModelType<PostModel>,
+    @InjectModel(PostModel) private readonly postModel: ModelType<PostModel>,
   ) {}
 
   async create(dto: CreatePostDto): Promise<DocumentType<PostModel>> {
@@ -20,5 +21,16 @@ export class PostsService {
 
   async findById(postId: string): Promise<DocumentType<PostModel>[]> {
     return this.postModel.find({ postId: new Types.ObjectId(postId) }).exec();
+  }
+
+  async findAll(): Promise<DocumentType<PostModel>[]> {
+    return this.postModel.find().exec();
+  }
+
+  async patch(
+    id: string,
+    dto: CreatePostDto,
+  ): Promise<DocumentType<PostModel>[]> {
+    return this.postModel.findByIdAndUpdate(id, dto, { new: true });
   }
 }

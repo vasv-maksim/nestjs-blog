@@ -9,10 +9,10 @@ export class CommentModel extends TimeStamps {
   text: string;
 
   @prop({ ref: () => UserModel })
-  user: Ref<UserModel>;
+  userId: Ref<UserModel>;
 
   @prop({ ref: () => PostModel })
-  post: Ref<PostModel>;
+  postId: Ref<PostModel>;
 
   @prop()
   rating: number;

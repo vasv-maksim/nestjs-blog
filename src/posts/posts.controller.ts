@@ -9,11 +9,11 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { FindPostDto } from './dto/find-post.dto';
 import { NOT_FOUND_POST } from './posts.constant';
-import { PostModel } from './posts.model';
 import { PostsService } from './services/posts.service';
 
 @Controller('posts')
@@ -21,30 +21,38 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Get()
   async getAll() {
-    console.log('');
-    return 'test';
+    return this.postsService.findAll();
   }
 
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    return `test${id}`;
+    return this.postsService.findById(id);
   }
 
+  @UsePipes(new ValidationPipe())
   @Post()
   async create(@Body() dto: CreatePostDto) {
-    console.log(dto);
     this.postsService.create(dto);
   }
 
   @HttpCode(200)
   @Post()
-  async find(@Body() dto: FindPostDto) {
-    console.log(dto);
+  async find(@Body() id: string) {
+    const post = this.postsService.findById(id);
+    if (!post) {
+      throw new HttpException(NOT_FOUND_POST, HttpStatus.NOT_FOUND);
+    }
+    return post;
   }
 
+  @UsePipes(new ValidationPipe())
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() dto: PostModel) {
-    console.log(id, dto);
+  async patch(@Param('id') id: string, @Body() dto: CreatePostDto) {
+    const patchedPost = this.postsService.patch(id, dto);
+    if (!patchedPost) {
+      throw new HttpException(NOT_FOUND_POST, HttpStatus.NOT_FOUND);
+    }
+    return patchedPost;
   }
 
   @Delete(':id')
@@ -53,5 +61,6 @@ export class PostsController {
     if (!deletedPost) {
       throw new HttpException(NOT_FOUND_POST, HttpStatus.NOT_FOUND);
     }
+    return deletedPost;
   }
 }
