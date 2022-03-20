@@ -13,3 +13,5 @@ $ npm run start:prod
 # Swagger
 Запустить сервер.
 http://localhost:3000/api
+Подключить Postman
+http://localhost:3000/api-json
