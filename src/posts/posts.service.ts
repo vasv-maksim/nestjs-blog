@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
-import { CreatePostDto } from '../dto/create-post.dto';
-import { PostModel } from '../posts.model';
+import { CreatePostDto } from './dto/create-post.dto';
+import { PostModel } from './posts.model';
 import { Types } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 

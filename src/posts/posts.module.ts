@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { PostModel } from './posts.model';
 import { PostsController } from './posts.controller';
-import { PostsService } from './services/posts.service';
+import { PostsService } from './posts.service';
 
 @Module({
   imports: [
