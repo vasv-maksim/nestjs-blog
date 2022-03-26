@@ -15,3 +15,9 @@ $ npm run start:prod
 http://localhost:3000/api
 Подключить Postman
 http://localhost:3000/api-json
+
+# Деплой
+- Установить ансибл
+- Установить модуль для ансибл ansible-galaxy collection install ansible.posix
+- Сгенерить ключи
+- 
